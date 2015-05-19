@@ -1,6 +1,7 @@
 package sample.com.buddyclouddroidtest.retrofit;
 
-import com.google.gson.Gson;
+import com.fatboyindustrial.gsonjodatime.Converters;
+import com.google.gson.GsonBuilder;
 import com.squareup.okhttp.OkHttpClient;
 
 import java.security.KeyManagementException;
@@ -27,7 +28,7 @@ public class BuddyCloudAdapter {
 
         return new RestAdapter.Builder()
                 .setClient(new OkClient(buildTrustAllCertClient()))
-                .setConverter(new StringConverter(new Gson()))
+                .setConverter(new GsonWithTypeFailToStringConverter(Converters.registerDateTime(new GsonBuilder()).create()))
                 .setLogLevel(RestAdapter.LogLevel.FULL)
                 .setEndpoint("https://demo.buddycloud.org:443/api")
                 .build()

@@ -17,14 +17,22 @@ import retrofit.mime.TypedOutput;
 /**
  * Created by Destri on 5/18/15.
  */
-public class StringConverter extends GsonConverter {
+public class GsonWithTypeFailToStringConverter extends GsonConverter {
 
-    public StringConverter(Gson gson) {
+    public GsonWithTypeFailToStringConverter(Gson gson) {
         super(gson);
     }
 
     @Override
     public Object fromBody(TypedInput typedInput, Type type) throws ConversionException {
+        if (typedInput.mimeType().equals("application/json")) {
+            return super.fromBody(typedInput, type);
+        } else {
+            return convertResultToString(typedInput, type);
+        }
+    }
+
+    private Object convertResultToString(TypedInput typedInput, Type type) {
         String text = null;
         try {
             text = fromStream(typedInput.in());
